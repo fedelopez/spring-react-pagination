@@ -1,0 +1,31 @@
+.app {
+  width: 75%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.movie-row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.movie-title {
+  margin-right: 2rem;
+  flex-grow: 2;
+}
+
+.movie-score {
+  flex-grow: 1;
+  text-align: end;
+}
+
+.page-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 2rem;
+}
+
+.page-total {
+  flex-grow: 2;
+  text-align: center
+}

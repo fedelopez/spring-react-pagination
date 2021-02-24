@@ -13,7 +13,7 @@
 Go to the Spring Initializr website with the following URL:
 
 ```bash
-https://start.spring.io/#!type=gradle-project&language=kotlin&platformVersion=2.4.2.RELEASE&packaging=jar&jvmVersion=11&groupId=com.adevinta&artifactId=ma-web-101&name=ma-web-101&description=Web%20Development%20Demo%20project%20for%20Spring%20Boot%20and%20React&packageName=com.adevinta.ma-web-101&dependencies=web,data-jdbc,h2
+https://start.spring.io/#!type=gradle-project&language=kotlin&platformVersion=2.4.3.RELEASE&packaging=jar&jvmVersion=11&groupId=com.adevinta&artifactId=ma-web-101&name=ma-web-101&description=Web%20Development%20Demo%20project%20for%20Spring%20Boot%20and%20React&packageName=com.adevinta.ma-web-101&dependencies=web,data-jdbc,h2
 ```
 
 This project features a Spring Backend with 
@@ -34,6 +34,8 @@ starts.
 
 Place it under the `resources` folder, having this name Spring will pick it up automatically.
 
+Copy these entries to connect to the DB and paste them on the `application.properties file
+
 ```properties
 spring.datasource.url=jdbc:h2:mem:moviedb;IGNORECASE=TRUE
 spring.datasource.driverClassName=org.h2.Driver
@@ -47,7 +49,7 @@ spring.h2.console.enabled=true
 
 ### Spring Repo Setup
 
-Create data class mapping the table records:
+Create data class mapping the table records, for this demo we only need movieTitle and imdbScore, but this is the full data class:
 
 ```kotlin
 data class Movie (
@@ -97,9 +99,10 @@ Now we can check that we are able to read from the repository when the app start
 @SpringBootApplication
 class MaWeb101Application(val movieRepository: MovieRepository) : CommandLineRunner {
 	override fun run(vararg args: String?) {
-		movieRepository.findAll().take(100).forEachIndexed { index, movie ->
-			println("$index - ${movie.movieTitle}, ${movie.imdbScore}")
-		}
+		movieRepository
+            .findAll()
+            .take(100)
+            .forEach(::println)
 	}
 }
 ````
@@ -111,21 +114,21 @@ Let's add a controller with a GET endpoint to return a response object a list of
 class MovieController(val movieRepository: MovieRepository) {
 
     @GetMapping("/api/movies")
-    fun getMovies(@RequestParam(required = false, defaultValue = "0") page: Int): ResponsePage {
+    fun getMovies(@RequestParam(required = false, defaultValue = "0") page: Int): PageResponse {
         val resultSize = 25
         val totalMovies = movieRepository.count()
         val pageRequest = PageRequest.of(page, resultSize, Sort.by("movieTitle"))
-        return ResponsePage(totalMovies, movieRepository.findAll(pageRequest).toList())
+        return PageResponse(totalMovies, movieRepository.findAll(pageRequest).toList())
     }
 
-    data class ResponsePage(val totalMovies: Long, val movies: List<Movie>)
+    data class PageResponse(val totalMovies: Long, val movies: List<Movie>)
 }
 ```
 
 When calling the endpoint with a client, we can pass a page number to obtain 25 movies and the total movies:
 
 ```bash
-curl http://localhost:8080/api/movies?page=1
+curl "http://localhost:8080/api/movies?page=1"
 ```
 
 ## Setting up the front end
@@ -148,9 +151,8 @@ Go to the `src` folder and scaffold a new React app on a folder named `web`:
 npx create-react-app web
 ```
 
+- Show how to start the app, make a quick update, stress the fact this is a dev server, not for deployment but for fast feedback loops
 - Show React app in project and go through quick overview of React app anatomy
-- Show how to install dependencies using `npm install`
-- Show how to start the app, start the fact this is a dev server, not for deployment but for fast feedback loops
 - Show how to build the app using `npm run build`
 - Show how the app gets injected in the `public/index.html` root div
 
@@ -170,21 +172,7 @@ Stress the fact:
 - this task should be done in the CI/CD pipeline or for local testing 
 - contents in `src/resources` should not be committed
 
-### Proxy the http calls to the Spring Boot server.
-
-Open the `package.json` from the React app and add a proxy to the Spring Boot server:
-
-```text
-{
-  "name": "web",
-  "version": "0.1.0",
-  "private": true,
-  ...
-  "proxy": "http://localhost:8080"
-}
-```
-
-Stress the fact the proxy is for dev only!
+Stress the fact the proxy is for local environment only!
 
 ### Creating our first component, say hi to JSX!
 
@@ -273,6 +261,8 @@ body {
 
 ### Our first call to the backend, enter fetch and component state
 
+Note the call below won't work with the React Server unless we proxy the calls (we will see this next). 
+
 ````jsx
 import React, {Component} from 'react';
 
@@ -307,6 +297,20 @@ class MovieList extends Component {
 
 export default MovieList;
 ````
+
+### Proxy the http calls to the Spring Boot server.
+
+Open the `package.json` from the React app and add a proxy to the Spring Boot server:
+
+```text
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  ...
+  "proxy": "http://localhost:8080"
+}
+```
 
 ### Show the total number of movies and pages
 

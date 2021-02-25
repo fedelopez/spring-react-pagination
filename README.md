@@ -16,7 +16,7 @@ Go to the Spring Initializr website with the following URL:
 https://start.spring.io/#!type=gradle-project&language=kotlin&platformVersion=2.4.3.RELEASE&packaging=jar&jvmVersion=11&groupId=com.adevinta&artifactId=ma-web-101&name=ma-web-101&description=Web%20Development%20Demo%20project%20for%20Spring%20Boot%20and%20React&packageName=com.adevinta.ma-web-101&dependencies=web,data-jdbc,h2
 ```
 
-This project features a Spring Backend with 
+This project features a Spring Backend with:
 
 - Gradle
 - Java 11
@@ -29,7 +29,7 @@ Unzip the file and open the project in IntelliJ.
 
 ### DB Setup and Seeding
 
-Show database `schema.sql` file with movie records. The goal is to be able to injest it automatically when the backend 
+Show database `schema.sql` file with movie records. The goal is to be able to injest it automatically when the backend
 starts.
 
 Place it under the `resources` folder, having this name Spring will pick it up automatically.
@@ -49,40 +49,41 @@ spring.h2.console.enabled=true
 
 ### Spring Repo Setup
 
-Create data class mapping the table records, for this demo we only need movieTitle and imdbScore, but this is the full data class:
+Create data class mapping the table records, for this demo we only need movieTitle and imdbScore, but this is the full
+data class:
 
 ```kotlin
-data class Movie (
-	@Id
-	val id: Long,
-	val color: String? = null,
-	val directorName: String? = null,
-	val numCriticForReviews: String? = null,
-	val duration : Int? = null,
-	val directorFacebookLikes : Int? = null,
-	val actorThreeFacebookLikes : Int? = null,
-	val actorTwoName : String? = null,
-	val actorOneFacebookLikes : Int? = null,
-	val gross : Int? = null,
-	val genres : String? = null,
-	val actorOneName : String? = null,
-	val movieTitle : String? = null,
-	val numVotedUsers : Int? = null,
-	val castTotalFacebookLikes : Int? = null,
-	val actorThreeName : String? = null,
-	val facenumberInPoster : Int? = null,
-	val plotKeywords : String? = null,
-	val movieImdbLink : String? = null,
-	val numUserForReviews : Int? = null,
-	val language : String? = null,
-	val country : String? = null,
-	val contentRating : String? = null,
-	val budget : Long? = null,
-	val titleYear : Int? = null,
-	val actorTwoFacebookLikes : Int? = null,
-	val imdbScore : BigDecimal? = null,
-	val aspectRatio : String? = null,
-	val movieFacebookLikes : Int? = null,
+data class Movie(
+    @Id
+    val id: Long,
+    val color: String? = null,
+    val directorName: String? = null,
+    val numCriticForReviews: String? = null,
+    val duration: Int? = null,
+    val directorFacebookLikes: Int? = null,
+    val actorThreeFacebookLikes: Int? = null,
+    val actorTwoName: String? = null,
+    val actorOneFacebookLikes: Int? = null,
+    val gross: Int? = null,
+    val genres: String? = null,
+    val actorOneName: String? = null,
+    val movieTitle: String? = null,
+    val numVotedUsers: Int? = null,
+    val castTotalFacebookLikes: Int? = null,
+    val actorThreeName: String? = null,
+    val facenumberInPoster: Int? = null,
+    val plotKeywords: String? = null,
+    val movieImdbLink: String? = null,
+    val numUserForReviews: Int? = null,
+    val language: String? = null,
+    val country: String? = null,
+    val contentRating: String? = null,
+    val budget: Long? = null,
+    val titleYear: Int? = null,
+    val actorTwoFacebookLikes: Int? = null,
+    val imdbScore: BigDecimal? = null,
+    val aspectRatio: String? = null,
+    val movieFacebookLikes: Int? = null,
 )
 ```
 
@@ -93,21 +94,23 @@ Let's add the counterpart pageable repository, to allow pagination of results fr
 interface MovieRepository : PagingAndSortingRepository<Movie, Long>
 ```
 
-Now we can check that we are able to read from the repository when the app starts, for that we will use a `CommandLineRunner`:
+Now we can check that we are able to read from the repository when the app starts, for that we will use
+a `CommandLineRunner`:
 
 ````kotlin
 @SpringBootApplication
 class MaWeb101Application(val movieRepository: MovieRepository) : CommandLineRunner {
-	override fun run(vararg args: String?) {
-		movieRepository
+    override fun run(vararg args: String?) {
+        movieRepository
             .findAll()
             .take(100)
             .forEach(::println)
-	}
+    }
 }
 ````
 
-Let's add a controller with a GET endpoint to return a response object a list of with 25 movies per page and the total movies:
+Let's add a controller with a `GET` endpoint to return a response object a list of with 25 movies per page and the total
+movies:
 
 ```kotlin
 @RestController
@@ -128,7 +131,7 @@ class MovieController(val movieRepository: MovieRepository) {
 When calling the endpoint with a client, we can pass a page number to obtain 25 movies and the total movies:
 
 ```bash
-curl "http://localhost:8080/api/movies?page=1"
+curl "http://localhost:8080/api/movies?page=1" | jq
 ```
 
 ## Setting up the front end
@@ -139,9 +142,9 @@ Navigate to the `resources/static` folder.
 
 Right click on it and select to create a new HTML page. Make some updates to it.
 
-Start the server and on your browser go to http://localhost:8080, the page is served automatically by Spring!
+Start the server and on your browser go to `http://localhost:8080, the page is served automatically by Spring!
 
-Now you can delete the page. 
+Now you can delete the page.
 
 ### Scaffolding the web app
 
@@ -151,10 +154,11 @@ Go to the `src` folder and scaffold a new React app on a folder named `web`:
 npx create-react-app web
 ```
 
-- Show how to start the app, make a quick update, stress the fact this is a dev server, not for deployment but for fast feedback loops
+- Show how to start the app, make a quick update, stress the fact this is a dev server, not for deployment but for fast
+  feedback loops
 - Show React app in project and go through quick overview of React app anatomy
-- Show how to build the app using `npm run build`
 - Show how the app gets injected in the `public/index.html` root div
+- Show how to build the app using `npm run build`
 
 ## Automate package deployment to Spring Boot folder
 
@@ -169,7 +173,7 @@ Update the `package.json` with the following scripts:
 
 Stress the fact:
 
-- this task should be done in the CI/CD pipeline or for local testing 
+- this task should be done in the CI/CD pipeline or for local testing
 - contents in `src/resources` should not be committed
 
 Stress the fact the proxy is for local environment only!
@@ -202,11 +206,11 @@ import './App.css'
 import MovieList from './MovieList'
 
 function App() {
-  return (
-      <div className="app">
-        <MovieList/>
-      </div>
-  );
+    return (
+        <div className="app">
+            <MovieList/>
+        </div>
+    );
 }
 
 export default App;
@@ -214,7 +218,7 @@ export default App;
 
 ### CSSing
 
-Update the `App.css with the following:
+Replace the contents of the file `App.css` with the following:
 
 ```css
 .app {
@@ -250,21 +254,12 @@ Update the `App.css with the following:
 }
 ```
 
-The `index.css` should have an entry like this one:
-
-```text
-body {
-  margin: 5%;
-  ...  
-}
-```
-
 ### Our first call to the backend, enter fetch and component state
 
-Note the call below won't work with the React Server unless we proxy the calls (we will see this next). 
+Note the call below won't work with the React Server unless we proxy the calls (we will see this next).
 
 ````jsx
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
 class MovieList extends Component {
     state = {
@@ -273,15 +268,15 @@ class MovieList extends Component {
 
     componentDidMount() {
         fetch('/api/movies')
-            .then(res => res.json())
-            .then(result => {
-                this.setState({...this.state, movies: result.movies})
+            .then(result => result.json())
+            .then(json => {
+                this.setState({movies: json.movies})
             })
     }
 
     render() {
-        const movieList = this.state.movies.map((movie, key) =>
-            <div className='movie-row' key={key}>
+        const movieList = this.state.movies.map((movie, index) =>
+            <div className='movie-row' key={index}>
                 <div className='movie-title'>{movie.movieTitle}</div>
                 <div className='movie-score'>{movie.imdbScore}</div>
             </div>
@@ -319,16 +314,16 @@ import React, {Component} from 'react';
 
 class MovieList extends Component {
     state = {
-        movies: [],
         currentPage: 0,
+        movies: [],
         totalMovies: 0,
     }
 
     componentDidMount() {
         fetch('/api/movies')
-            .then(res => res.json())
-            .then(result => {
-                this.setState({...this.state, currentPage: 1, totalMovies: result.totalMovies, movies: result.movies})
+            .then(result => result.json())
+            .then(json => {
+                this.setState({currentPage: 0, totalMovies: json.totalMovies, movies: json.movies})
             })
     }
 
@@ -344,7 +339,8 @@ class MovieList extends Component {
                 <h1>Top Rated Movies</h1>
                 {movieList}
                 <div className='page-container'>
-                    <div className='page-total'>Total: {this.state.totalMovies}, page {this.state.currentPage} of {this.totalPages()}</div>
+                    <div className='page-total'>Total: {this.state.totalMovies},
+                        page {this.state.currentPage} of {this.totalPages()}</div>
                 </div>
             </div>
         )
@@ -370,9 +366,9 @@ class MovieList extends Component {
 
     componentDidMount() {
         fetch('/api/movies')
-            .then(res => res.json())
-            .then(result => {
-                this.setState({...this.state, currentPage: 1, totalMovies: result.totalMovies, movies: result.movies})
+            .then(result => result.json())
+            .then(json => {
+                this.setState({currentPage: 0, totalMovies: json.totalMovies, movies: json.movies})
             })
     }
 
@@ -422,9 +418,9 @@ class MovieList extends Component {
 
     componentDidMount() {
         fetch('/api/movies')
-            .then(res => res.json())
-            .then(result => {
-                this.setState({...this.state, currentPage: 1, totalMovies: result.totalMovies, movies: result.movies})
+            .then(result => result.json())
+            .then(json => {
+                this.setState({currentPage: 0, totalMovies: json.totalMovies, movies: json.movies})
             })
     }
 
@@ -458,23 +454,23 @@ class MovieList extends Component {
 
     totalPages = () => Math.floor(this.state.totalMovies / 25)
 
-    handlePrevious = (e) => {
-        e.preventDefault()
+    handlePrevious = (event) => {
+        event.preventDefault()
         const newPage = Math.max(0, this.state.currentPage - 1)
         fetch(`/api/movies?page=${newPage}`)
             .then(res => res.json())
             .then(result => {
-                this.setState({...this.state, currentPage: newPage, totalMovies: result.totalMovies, movies: result.movies})
+                this.setState({currentPage: newPage, totalMovies: result.totalMovies, movies: result.movies})
             })
     }
 
-    handleNext = (e) => {
-        e.preventDefault()
+    handleNext = (event) => {
+        event.preventDefault()
         const newPage = Math.min(this.totalPages(), this.state.currentPage + 1)
         fetch(`/api/movies?page=${newPage}`)
-            .then(res => res.json())
-            .then(result => {
-                this.setState({...this.state, currentPage: newPage, totalMovies: result.totalMovies, movies: result.movies})
+            .then(result => result.json())
+            .then(json => {
+                this.setState({currentPage: newPage, totalMovies: json.totalMovies, movies: json.movies})
             })
     }
 }
@@ -495,7 +491,7 @@ class MovieList extends Component {
     }
 
     componentDidMount() {
-        this.fetchMovies(1)
+        this.fetchMovies(0)
     }
 
     render() {
@@ -528,22 +524,22 @@ class MovieList extends Component {
 
     totalPages = () => Math.floor(this.state.totalMovies / 25)
 
-    handlePrevious = (e) => {
-        e.preventDefault()
+    handlePrevious = (event) => {
+        event.preventDefault()
         const newPage = Math.max(0, this.state.currentPage - 1)
         this.fetchMovies(newPage)
     }
 
-    handleNext = (e) => {
-        e.preventDefault()
+    handleNext = (event) => {
+        event.preventDefault()
         const newPage = Math.min(this.totalPages(), this.state.currentPage + 1)
         this.fetchMovies(newPage)
     }
 
     fetchMovies = (newPage) => fetch(`/api/movies?page=${newPage}`)
-        .then(res => res.json())
-        .then(result => {
-            this.setState({...this.state, currentPage: newPage, totalMovies: result.totalMovies, movies: result.movies})
+        .then(result => result.json())
+        .then(json => {
+            this.setState({...this.state, currentPage: newPage, totalMovies: json.totalMovies, movies: json.movies})
         })
 }
 
@@ -553,3 +549,4 @@ export default MovieList
 ## Other topics
 
 - Routing client side
+- Props and communicating between components

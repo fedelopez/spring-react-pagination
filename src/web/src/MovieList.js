@@ -30,14 +30,14 @@ class MovieList extends Component {
         )
     }
 
-    pageBar = () => (
-        <div className='page-container'>
+    pageBar = () => {
+        return <div className='page-container'>
             <a href='#' onClick={this.handlePrevious}>Previous</a>
             <div className='page-total'>Total: {this.state.totalMovies},
                 page {this.state.currentPage} of {this.totalPages()}</div>
             <a href='#' onClick={this.handleNext}>Next</a>
         </div>
-    )
+    }
 
     totalPages = () => Math.floor(this.state.totalMovies / 25)
 

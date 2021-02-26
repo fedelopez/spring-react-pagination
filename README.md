@@ -34,7 +34,7 @@ starts.
 
 Place it under the `resources` folder, having this name Spring will pick it up automatically.
 
-Copy these entries to connect to the DB and paste them on the `application.properties file
+Copy these entries to connect to the DB and paste them on the `application.properties` file
 
 ```properties
 spring.datasource.url=jdbc:h2:mem:moviedb;IGNORECASE=TRUE
@@ -391,12 +391,12 @@ class MovieList extends Component {
         )
     }
 
-    pageBar = () => (
-        <div className='page-container'>
+    pageBar = () => {
+        return <div className='page-container'>
             <div className='page-total'>Total: {this.state.totalMovies},
                 page {this.state.currentPage} of {this.totalPages()}</div>
         </div>
-    )
+    }
 
     totalPages = () => Math.floor(this.state.totalMovies / 25)
 }
@@ -443,14 +443,14 @@ class MovieList extends Component {
         )
     }
 
-    pageBar = () => (
-        <div className='page-container'>
+    pageBar = () => {
+        return <div className='page-container'>
             <a href='#' onClick={this.handlePrevious}>Previous</a>
             <div className='page-total'>Total: {this.state.totalMovies},
                 page {this.state.currentPage} of {this.totalPages()}</div>
             <a href='#' onClick={this.handleNext}>Next</a>
         </div>
-    )
+    }
 
     totalPages = () => Math.floor(this.state.totalMovies / 25)
 
@@ -513,14 +513,14 @@ class MovieList extends Component {
         )
     }
 
-    pageBar = () => (
-        <div className='page-container'>
+    pageBar = () => {
+        return <div className='page-container'>
             <a href='#' onClick={this.handlePrevious}>Previous</a>
             <div className='page-total'>Total: {this.state.totalMovies},
                 page {this.state.currentPage} of {this.totalPages()}</div>
             <a href='#' onClick={this.handleNext}>Next</a>
         </div>
-    )
+    }
 
     totalPages = () => Math.floor(this.state.totalMovies / 25)
 
